@@ -70,6 +70,24 @@ jobs:
           Compress-Archive -Path "$stage\*" -DestinationPath "$name.zip"
           "name=$name" >> $env:GITHUB_OUTPUT
 
+      - name: Test install and uninstall scripts
+        shell: pwsh
+        run: |
+          $dir = Join-Path $env:RUNNER_TEMP 'install-test'
+          Expand-Archive '${{ steps.package.outputs.name }}.zip' $dir
+          if (-not (Test-Path (Join-Path $dir '安装.cmd'))) { throw 'Chinese file names were not preserved in the zip.' }
+          powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir 'install.ps1')
+          if ($LASTEXITCODE -ne 0) { throw "install.ps1 failed: $LASTEXITCODE" }
+          $addin = Get-ItemProperty 'HKCU:\Software\Microsoft\Office\Word\Addins\WordOllama'
+          Write-Host "Manifest = $($addin.Manifest); LoadBehavior = $($addin.LoadBehavior)"
+          $vsto = $addin.Manifest -replace '\|vstolocal$', ''
+          if (-not (Test-Path ([Uri]$vsto).LocalPath)) { throw 'Registered manifest does not exist.' }
+          $trusted = Get-ChildItem 'HKCU:\Software\Microsoft\VSTO\Security\Inclusion' | Where-Object { (Get-ItemProperty $_.PSPath).Url -eq $vsto }
+          if (@($trusted).Count -ne 1) { throw 'Inclusion list entry missing.' }
+          powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir 'uninstall.ps1')
+          if ($LASTEXITCODE -ne 0) { throw "uninstall.ps1 failed: $LASTEXITCODE" }
+          if (Test-Path 'HKCU:\Software\Microsoft\Office\Word\Addins\WordOllama') { throw 'Uninstall left the add-in key.' }
+
       - uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.package.outputs.name }}
