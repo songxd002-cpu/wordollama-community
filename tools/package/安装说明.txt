@@ -1,0 +1,25 @@
+﻿WordOllama 案例库测试版 安装说明
+
+系统要求
+- Windows 10 或 11，64 位或 32 位 Word 2016 及以上（含 Microsoft 365）
+- .NET Framework 4.8（Windows 10 1903 以后自带）
+
+安装
+1. 关闭所有 Word 窗口。
+2. 把 zip 完整解压到任意文件夹（不要在压缩包里直接双击）。
+3. 双击“安装.cmd”，看到“安装完成”后按任意键关闭。
+4. 打开 Word，功能区出现 WordOllama 选项卡即安装成功。
+
+插件安装在 %LOCALAPPDATA%\WordOllama\AddIn，只对当前 Windows 用户生效，不需要管理员权限。
+更新时下载新版 zip，重复上面的步骤即可，原有设置会保留。
+
+卸载
+关闭 Word，双击“卸载.cmd”。
+
+看不到 WordOllama 选项卡时
+- Word → 文件 → 选项 → 加载项 → 下方“管理”选“COM 加载项”→ 转到，确认 WordOllama 已勾选。
+- 同一页面“管理”选“禁用项目”，如果 WordOllama 在里面，启用它。
+- 如果安装时提示没有检测到 VSTO 运行时，请在微软官网搜索下载
+  “Visual Studio 2010 Tools for Office Runtime”并安装，然后重启 Word。
+
+本软件基于 GPL-3.0 开源项目 WordOllama 修改，源码地址见 SOURCE.txt。
