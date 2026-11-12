@@ -301,6 +301,12 @@
                                     </Button>
                                 </Grid>
                             </Expander>
+                            <!-- 案例库开关：勾选后本次及之后的 Agent 任务会检索服务器端案例库 -->
+                            <CheckBox x:Name="chkCaseLibrary"
+                                      Content="{local:Loc I18n_UiCaseLibraryToggle}"
+                                      ToolTip="{local:Loc I18n_UiCaseLibraryToggleTip}"
+                                      Click="ChkCaseLibrary_Click"
+                                      Margin="0,0,0,8"/>
                             <!-- 粘贴图片预览 -->
                             <Border x:Name="pastePreview" Visibility="Collapsed"
                                     Background="{DynamicResource MaterialDesignCardBackground}"

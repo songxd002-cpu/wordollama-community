@@ -900,6 +900,21 @@
                                       Click="AgentExternalToolsToggle_Click"
                                       Margin="0,0,0,24"/>
 
+                        <TextBlock Style="{StaticResource ModernSubHeader}" Text="{local:Loc I18n_CaseLibraryTitle}"/>
+                        <TextBlock Style="{StaticResource ModernCaption}" Text="{local:Loc I18n_CaseLibraryDesc}"
+                                   Margin="0,2,0,12" TextWrapping="Wrap"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="{local:Loc I18n_CaseLibraryEndpoint}" Width="160" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                            <TextBox x:Name="CaseLibraryEndpointBox" Width="360" MaxLength="2048"
+                                     materialDesign:HintAssist.Hint="https://cases.example.com/mcp"
+                                     Style="{StaticResource MaterialDesignOutlinedTextBox}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="0,0,0,24">
+                            <TextBlock Text="{local:Loc I18n_CaseLibraryApiKey}" Width="160" TextWrapping="Wrap" VerticalAlignment="Center"/>
+                            <PasswordBox x:Name="CaseLibraryApiKeyBox" Width="360"
+                                         Style="{DynamicResource MaterialDesignRevealPasswordBox}"/>
+                        </StackPanel>
+
                         <Separator Margin="0,0,0,24"/>
 
                         <TextBlock Style="{StaticResource ModernSubHeader}" Text="{local:Loc I18n_ReviewLimitsTitle}"/>

@@ -3293,4 +3293,21 @@ Check your network connection or try again later. Error: {0}</value>
   <data name="I18n_AgentToolDesc_apply_review_revisions" xml:space="preserve"><value>Apply completed corrections as precise tracked Word revisions in their original text areas, using the configured AI reviewer. Requires Agent Tracked Changes mode. Resume unfinished batches first.</value></data>
   <data name="I18n_AgentToolDesc_save_review_document" xml:space="preserve"><value>Save the reviewed document and session; export full Markdown and JSON review reports beside the document by default.</value></data>
   <data name="I18n_ReviewSelectedArea" xml:space="preserve"><value>Coverage: the selected document area; only text inside the selection is reviewed.</value></data>
+  <data name="I18n_AgentEffectCaseLibrary" xml:space="preserve"><value>search the case library service</value></data>
+  <data name="I18n_AgentToolDescCaseLibrary" xml:space="preserve"><value>{0} — [Case library] {1}</value></data>
+  <data name="I18n_CaseLibraryTitle" xml:space="preserve"><value>Case library</value></data>
+  <data name="I18n_CaseLibraryDesc" xml:space="preserve"><value>Connects to a server-side case search service (MCP Streamable HTTP). When "Use case library" is checked in the Agent pane, the Agent sends search keywords and relevant clause excerpts to this service during review. Nothing is connected while it is unchecked. The access key is stored encrypted on this computer only.</value></data>
+  <data name="I18n_CaseLibraryEndpoint" xml:space="preserve"><value>Service URL</value></data>
+  <data name="I18n_CaseLibraryApiKey" xml:space="preserve"><value>Access key</value></data>
+  <data name="I18n_CaseLibraryNotConfigured" xml:space="preserve"><value>The case library URL is not configured. Enter it in Settings → Agent → Case library first.</value></data>
+  <data name="I18n_CaseLibraryEndpointInvalid" xml:space="preserve"><value>Invalid case library URL: remote addresses must start with https://. Only local addresses (localhost, 127.0.0.1) may use http://.</value></data>
+  <data name="I18n_CaseLibraryApiKeyInvalid" xml:space="preserve"><value>The case library access key contains invalid characters.</value></data>
+  <data name="I18n_CaseLibraryConnectFailed" xml:space="preserve"><value>Could not connect to the case library service: {0}</value></data>
+  <data name="I18n_CaseLibraryMissingTool" xml:space="preserve"><value>The case library service does not provide the required tool {0}. Check the server.</value></data>
+  <data name="I18n_UiCaseLibraryToggle" xml:space="preserve"><value>Use case library</value></data>
+  <data name="I18n_UiCaseLibraryToggleTip" xml:space="preserve"><value>When checked, the Agent searches the server-side case library during review. Search keywords and clause excerpts are sent to the case library service.</value></data>
+  <data name="I18n_UiCaseLibraryTitle" xml:space="preserve"><value>Case library</value></data>
+  <data name="I18n_UiCaseLibraryConnected" xml:space="preserve"><value>Connected to the case library. This task will search related cases.</value></data>
+  <data name="I18n_UiCaseLibraryUnavailablePrompt" xml:space="preserve"><value>The case library is unavailable: {0}&#10;&#10;Continue this task without the case library?</value></data>
+  <data name="I18n_UiCaseLibrarySkipped" xml:space="preserve"><value>The case library is unavailable. This task did not use it.</value></data>
 </root>

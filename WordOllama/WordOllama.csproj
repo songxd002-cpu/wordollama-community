@@ -224,6 +224,7 @@
     <Compile Include="lib\OllamaFunctions.cs" />
       <Compile Include="lib\OpenAIFunctions.cs" />
     <Compile Include="lib\ToolExecutionPolicy.cs" />
+    <Compile Include="lib\CaseLibrary.cs" />
     <Compile Include="lib\AgentToolCatalogService.cs" />
     <Compile Include="lib\AgentToolText.cs" />
     <Compile Include="lib\WorkflowStatus.cs" />

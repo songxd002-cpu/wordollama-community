@@ -13,7 +13,9 @@ namespace WordOllama.lib
         LocalProcess = 8,
         ExternalMcp = 16,
         LocalFileRead = 32,
-        LocalFileWrite = 64
+        LocalFileWrite = 64,
+        /// <summary>只读检索用户勾选的案例库服务；勾选框即授权，不走外部工具审批。</summary>
+        CaseLibrary = 128
     }
 
     public enum AgentExecutionMode
@@ -42,6 +44,8 @@ namespace WordOllama.lib
                 return ToolEffect.LocalFileRead;
             if (tool is McpToolWrapper)
                 return ToolEffect.ExternalMcp;
+            if (tool is CaseLibraryTool)
+                return ToolEffect.CaseLibrary;
             if (tool is GrepTool)
                 return ToolEffect.DocumentRead | ToolEffect.LocalFileRead;
 
@@ -80,6 +84,7 @@ namespace WordOllama.lib
             if ((effects & ToolEffect.ExternalMcp) != 0) parts.Add(AgentToolText.T("I18n_AgentEffectExternalMcp"));
             if ((effects & ToolEffect.LocalFileRead) != 0) parts.Add(AgentToolText.T("I18n_AgentEffectLocalFileRead"));
             if ((effects & ToolEffect.LocalFileWrite) != 0) parts.Add(AgentToolText.T("I18n_AgentEffectLocalFileWrite"));
+            if ((effects & ToolEffect.CaseLibrary) != 0) parts.Add(AgentToolText.T("I18n_AgentEffectCaseLibrary"));
             return string.Join(english ? ", " : "、", parts);
         }
     }

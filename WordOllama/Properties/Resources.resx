@@ -3302,4 +3302,21 @@ ReAct 自主 Agent 模式</value>
   <data name="I18n_AgentToolDesc_apply_review_revisions" xml:space="preserve"><value>把已完成的审校建议以精确 Word 修订写回各自区域，使用设置中的 AI 修订者。仅在 Agent 修订模式下允许；仍有未完成批次时先恢复审校。</value></data>
   <data name="I18n_AgentToolDesc_save_review_document" xml:space="preserve"><value>保存当前审校文档及会话；默认在文档旁导出完整 Markdown 和 JSON 审校报告。</value></data>
   <data name="I18n_ReviewSelectedArea" xml:space="preserve"><value>范围：本次选定的文档区域，仅处理选区内的文字。</value></data>
+  <data name="I18n_AgentEffectCaseLibrary" xml:space="preserve"><value>检索案例库服务</value></data>
+  <data name="I18n_AgentToolDescCaseLibrary" xml:space="preserve"><value>{0} — [案例库] {1}</value></data>
+  <data name="I18n_CaseLibraryTitle" xml:space="preserve"><value>案例库</value></data>
+  <data name="I18n_CaseLibraryDesc" xml:space="preserve"><value>连接服务器端的案例检索服务（MCP Streamable HTTP）。在 Agent 面板勾选“调用案例库”后，Agent 审查时会把检索关键词和相关条款片段发送到该服务；未勾选时不会连接。访问密钥仅加密保存在本机。</value></data>
+  <data name="I18n_CaseLibraryEndpoint" xml:space="preserve"><value>服务地址</value></data>
+  <data name="I18n_CaseLibraryApiKey" xml:space="preserve"><value>访问密钥</value></data>
+  <data name="I18n_CaseLibraryNotConfigured" xml:space="preserve"><value>尚未配置案例库服务地址。请在“设置 → Agent → 案例库”中填写后再勾选。</value></data>
+  <data name="I18n_CaseLibraryEndpointInvalid" xml:space="preserve"><value>案例库服务地址无效：远程地址必须以 https:// 开头，只有本机地址（localhost、127.0.0.1）可以使用 http://。</value></data>
+  <data name="I18n_CaseLibraryApiKeyInvalid" xml:space="preserve"><value>案例库访问密钥包含无效字符。</value></data>
+  <data name="I18n_CaseLibraryConnectFailed" xml:space="preserve"><value>无法连接案例库服务：{0}</value></data>
+  <data name="I18n_CaseLibraryMissingTool" xml:space="preserve"><value>案例库服务没有提供必需的工具 {0}，请检查服务端。</value></data>
+  <data name="I18n_UiCaseLibraryToggle" xml:space="preserve"><value>调用案例库</value></data>
+  <data name="I18n_UiCaseLibraryToggleTip" xml:space="preserve"><value>勾选后，Agent 审查时会检索服务器端案例库，检索关键词和条款片段会发送到案例库服务。</value></data>
+  <data name="I18n_UiCaseLibraryTitle" xml:space="preserve"><value>案例库</value></data>
+  <data name="I18n_UiCaseLibraryConnected" xml:space="preserve"><value>已连接案例库，本次任务会检索相关案例。</value></data>
+  <data name="I18n_UiCaseLibraryUnavailablePrompt" xml:space="preserve"><value>案例库暂时不可用：{0}&#10;&#10;是否不使用案例库，继续本次任务？</value></data>
+  <data name="I18n_UiCaseLibrarySkipped" xml:space="preserve"><value>案例库不可用，本次任务未使用案例库。</value></data>
 </root>

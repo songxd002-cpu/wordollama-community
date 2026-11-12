@@ -88,6 +88,7 @@ namespace WordOllama.NewUI
             txtReviewInstruction.Text = UiText.DefaultReviewInstruction;
             _writingProfile = WritingProfileManager.LoadForDocument(Globals.ThisAddIn?.Application?.ActiveDocument);
             txtWritingProfile.Text = _writingProfile.Instructions ?? "";
+            chkCaseLibrary.IsChecked = AppConfig.Instance?.CaseLibraryEnabled == true;
             InitializeReviewSessions();
             UpdateIssueSummary();
             UpdateSuggestionEmptyState();
@@ -108,6 +109,27 @@ namespace WordOllama.NewUI
             ThemeManager.ThemeChanged += ThemeManager_ThemeChanged;
             _themeSubscribed = true;
             ApplyTheme();
+        }
+
+        private void ChkCaseLibrary_Click(object sender, RoutedEventArgs e)
+        {
+            bool isChecked = chkCaseLibrary.IsChecked == true;
+            if (isChecked && !CaseLibrary.IsConfigured)
+            {
+                MessageBox.Show(
+                    UiText.T("I18n_CaseLibraryNotConfigured"),
+                    UiText.T("I18n_UiCaseLibraryTitle"),
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                chkCaseLibrary.IsChecked = false;
+                isChecked = false;
+            }
+
+            if (AppConfig.Instance != null)
+            {
+                AppConfig.Instance.CaseLibraryEnabled = isChecked;
+                AppConfig.Save();
+            }
         }
 
         private void AgentTaskPaneUI_Unloaded(object sender, RoutedEventArgs e)
@@ -713,6 +735,7 @@ namespace WordOllama.NewUI
             // Capture WPF-owned values before the first await. Provider and MCP continuations
             // are not required to return to this control's Dispatcher.
             string agentGoal = txtAgentGoal.Text;
+            bool caseLibraryRequested = chkCaseLibrary.IsChecked == true;
 
             // 重置步骤卡片计数器
             _bufferedThought = null;
@@ -724,6 +747,7 @@ namespace WordOllama.NewUI
             sourcesExpander.Visibility = Visibility.Collapsed;
             btnMakeSkill.Visibility = Visibility.Collapsed;
             McpToolManager mcpManager = null;
+            McpToolManager caseLibraryManager = null;
             bool externalToolsEnabled = SharedSettings.AgentExternalToolsEnabled;
 
             if (!externalToolsEnabled)
@@ -765,6 +789,38 @@ namespace WordOllama.NewUI
                 {
                     _agent.SetMcpManager(mcpManager);
                     Dispatcher.Invoke(RefreshAgentApiDocumentation);
+                }
+
+                // 案例库：仅在用户勾选时连接；与“外部工具”授权相互独立。
+                if (caseLibraryRequested)
+                {
+                    try
+                    {
+                        CancellationToken token = _cts.Token;
+                        caseLibraryManager = await Task.Run(() => CaseLibrary.ConnectAsync(token), token);
+                        _agent.SetCaseLibrary(caseLibraryManager);
+                        Dispatcher.Invoke(() =>
+                        {
+                            AppendExecutionProcess(UiText.T("I18n_UiCaseLibraryConnected"));
+                            RefreshAgentApiDocumentation();
+                        });
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        throw;
+                    }
+                    catch (Exception ex)
+                    {
+                        DebugLogger.Log("CaseLibrary.Connect", ex.ToString());
+                        bool continueWithout = Dispatcher.Invoke(() => MessageBox.Show(
+                            UiText.F("I18n_UiCaseLibraryUnavailablePrompt", ex.Message),
+                            UiText.T("I18n_UiCaseLibraryTitle"),
+                            MessageBoxButton.YesNo,
+                            MessageBoxImage.Warning)) == MessageBoxResult.Yes;
+                        if (!continueWithout)
+                            throw new OperationCanceledException();
+                        Dispatcher.Invoke(() => AppendExecutionProcess(UiText.T("I18n_UiCaseLibrarySkipped")));
+                    }
                 }
 
                 // [Checkpoint] 断点恢复检测
@@ -967,6 +1023,7 @@ namespace WordOllama.NewUI
                 _cts?.Dispose();
                 _cts = null;
                 mcpManager?.Dispose();
+                caseLibraryManager?.Dispose();
 
                 if (!string.IsNullOrWhiteSpace(_pendingRequirement))
                 {

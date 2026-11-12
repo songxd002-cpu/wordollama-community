@@ -152,6 +152,18 @@ namespace WordOllama.lib
         public string AgentExecutionMode { get; set; } = "TrackedChanges";
         /// <summary>Whether high-risk external Agent tools are included without a task-level prompt.</summary>
         public bool AgentExternalToolsEnabled { get; set; } = false;
+        /// <summary>Agent 面板“调用案例库”勾选状态。勾选即视为本机用户同意向案例库服务发送检索内容。</summary>
+        public bool CaseLibraryEnabled { get; set; } = false;
+        /// <summary>案例库 MCP 服务地址（Streamable HTTP）。远程地址必须使用 HTTPS。</summary>
+        public string CaseLibraryEndpoint { get; set; } = "";
+        [JsonIgnore]
+        public string CaseLibraryApiKey { get; set; } = "";
+        [JsonProperty("CaseLibraryApiKey")]
+        private string StoredCaseLibraryApiKey
+        {
+            get { return SecretProtector.Protect(CaseLibraryApiKey); }
+            set { CaseLibraryApiKey = SecretProtector.UnprotectOrLegacy(value); }
+        }
 
         #endregion
 

@@ -59,6 +59,7 @@ namespace WordOllama.lib
         // 里程碑追踪（防止重复修改同一段落）
         private readonly HashSet<string> _completedMilestones = new HashSet<string>();
         private readonly bool _externalToolsEnabled;
+        private bool _caseLibraryEnabled;
 
         // 文档快照（启动时自动生成）
         private string _documentSnapshot = null;
@@ -176,6 +177,24 @@ namespace WordOllama.lib
                 _toolRegistry.Register(new McpToolWrapper(toolDef, manager));
             }
         }
+
+        /// <summary>
+        /// 注册案例库检索工具（仅在用户勾选“调用案例库”且连接成功后调用）。
+        /// 与 SetMcpManager 不同，这里不依赖外部工具开关：勾选框本身就是授权，且只注册白名单内的只读工具。
+        /// </summary>
+        public void SetCaseLibrary(McpToolManager manager)
+        {
+            if (manager == null) return;
+            foreach (var toolDef in manager.GetEnabledTools())
+            {
+                if (toolDef.ServerName != CaseLibrary.ServerName || !CaseLibrary.IsAllowedTool(toolDef.Name))
+                    continue;
+                _toolRegistry.Register(new CaseLibraryTool(toolDef, manager));
+                _caseLibraryEnabled = true;
+            }
+        }
+
+        public bool CaseLibraryEnabled => _caseLibraryEnabled;
 
         /// <summary>
         /// 获取已注册的工具注册表（可用于外部检查或添加自定义工具）。
@@ -753,7 +772,7 @@ namespace WordOllama.lib
         /// </summary>
         private string BuildSystemPrompt(string requirement)
         {
-            return PromptTemplateService.BuildAgentSystemPrompt(
+            string prompt = PromptTemplateService.BuildAgentSystemPrompt(
                 _documentSnapshot,
                 _toolRegistry.BuildToolDescriptions(),
                 _toolRegistry.GetAllTools().Count(),
@@ -761,6 +780,10 @@ namespace WordOllama.lib
                 PromptTemplateService.ResolveLanguage(SharedSettings.LanguageMode, requirement),
                 _goal,
                 UserMemoryStore.BuildPromptContext("agent"));
+            if (_caseLibraryEnabled)
+                prompt += CaseLibrary.BuildPromptRules(
+                    PromptTemplateService.ResolveUseEnglish(SharedSettings.LanguageMode, requirement));
+            return prompt;
         }
 
         private void PublishSources(string tool, string content)

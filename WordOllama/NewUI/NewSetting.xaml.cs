@@ -395,6 +395,8 @@ namespace WordOllama.NewUI
             int modeIndex = modeItems.FindIndex(item => string.Equals(item.Tag?.ToString(), executionMode, StringComparison.OrdinalIgnoreCase));
             AgentExecutionModeSelector.SelectedIndex = modeIndex >= 0 ? modeIndex : 2;
             AgentExternalToolsToggle.IsChecked = SharedSettings.AgentExternalToolsEnabled;
+            CaseLibraryEndpointBox.Text = AppConfig.Instance.CaseLibraryEndpoint ?? "";
+            CaseLibraryApiKeyBox.Password = AppConfig.Instance.CaseLibraryApiKey ?? "";
             DiagnosticLoggingToggle.IsChecked = DebugLogger.Enabled;
 
 
@@ -1814,6 +1816,10 @@ namespace WordOllama.NewUI
             AppConfig.Instance.LinterContextTokens = int.Parse(LinterContextTokensBox.Text.Trim());
             AppConfig.Instance.LinterTimeoutSeconds = int.Parse(LinterTimeoutSecondsBox.Text.Trim());
             AppConfig.Instance.AgentTaskTimeoutMinutes = int.Parse(AgentTaskTimeoutMinutesBox.Text.Trim());
+            AppConfig.Instance.CaseLibraryEndpoint = CaseLibraryEndpointBox.Text.Trim();
+            AppConfig.Instance.CaseLibraryApiKey = CaseLibraryApiKeyBox.Password.Trim();
+            if (string.IsNullOrEmpty(AppConfig.Instance.CaseLibraryEndpoint))
+                AppConfig.Instance.CaseLibraryEnabled = false;
 
             // Markdown 转换样式
             var mdMappings = new List<MarkdownStyleMapping>
@@ -1902,6 +1908,10 @@ namespace WordOllama.NewUI
                 errors.Add(Loc.F("I18n_SettingsInvalidNumber", Loc.T("I18n_ReviewOllamaOutputTokens"), 256, 1000000));
             if (ReviewReviewerNameBox.Text.Length > 128 || ReviewReviewerNameBox.Text.Any(char.IsControl))
                 errors.Add(Loc.T("I18n_ReviewReviewerInvalid"));
+            if (!CaseLibrary.IsValidEndpoint(CaseLibraryEndpointBox.Text))
+                errors.Add(Loc.T("I18n_CaseLibraryEndpointInvalid"));
+            if (CaseLibraryApiKeyBox.Password.Any(char.IsControl))
+                errors.Add(Loc.T("I18n_CaseLibraryApiKeyInvalid"));
             if (!TryReadRange(OllamaTimeoutSecondsBox, "OllamaTimeoutSeconds", 30, 86400, errors))
                 errors.Add(Loc.F("I18n_SettingsInvalidNumber", Loc.T("I18n_OllamaTimeoutSeconds"), 30, 86400));
             if (!TryReadRange(LinterContextTokensBox, "LinterContextTokens", 512, 1000000, errors))
