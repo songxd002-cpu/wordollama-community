@@ -10,6 +10,10 @@
 3. 双击“安装.cmd”，看到“安装完成”后按任意键关闭。
 4. 打开 Word，功能区出现 WordOllama 选项卡即安装成功。
 
+安装时会同时安装“广告合同审查”技能（文档\WordAgentSkills\ad-contract-review）。
+使用方法：打开合同，在 WordOllama 的 Agent 面板输入“审查这份广告合同，我方是乙方”（或甲方），
+需要引用判例时勾选“调用案例库”。重新安装新版时，该技能会自动更新。
+
 插件安装在 %LOCALAPPDATA%\WordOllama\AddIn，只对当前 Windows 用户生效，不需要管理员权限。
 更新时下载新版 zip，重复上面的步骤即可，原有设置会保留。
 

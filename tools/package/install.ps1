@@ -56,6 +56,19 @@ New-ItemProperty -Path $addinKey -Name Description -Value 'AI-assisted tools for
 New-ItemProperty -Path $addinKey -Name Manifest -Value "$manifestUri|vstolocal" -PropertyType String -Force | Out-Null
 New-ItemProperty -Path $addinKey -Name LoadBehavior -Value 3 -PropertyType DWord -Force | Out-Null
 
+# 安装或更新随包附带的审查技能（覆盖同名技能目录，其他用户自建技能不受影响）。
+$skillsSource = Join-Path $PSScriptRoot 'skills'
+if (Test-Path $skillsSource) {
+    $skillsTarget = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'WordAgentSkills'
+    New-Item -ItemType Directory -Force -Path $skillsTarget | Out-Null
+    foreach ($skill in Get-ChildItem $skillsSource -Directory) {
+        $dest = Join-Path $skillsTarget $skill.Name
+        if (Test-Path $dest) { Remove-Item -Recurse -Force $dest }
+        Copy-Item -Recurse $skill.FullName $dest
+        Write-Host "已安装审查技能：$($skill.Name)"
+    }
+}
+
 Write-Host ''
 Write-Host "安装完成：$target" -ForegroundColor Green
 Write-Host '现在打开 Word，功能区应出现 WordOllama 选项卡。'

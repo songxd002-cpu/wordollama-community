@@ -65,6 +65,8 @@ jobs:
           ./tools/complete-vsto-output.ps1 -OutputDir (Join-Path $stage 'WordOllama') `
             -SearchRoots (Resolve-Path 'WordOllama').Path, (Join-Path $env:USERPROFILE '.nuget\packages')
           Copy-Item WordOllama.cer, tools\package\* $stage
+          New-Item -ItemType Directory -Path (Join-Path $stage 'skills') | Out-Null
+          Copy-Item -Recurse WordOllama\Resources\Skills\ad-contract-review (Join-Path $stage 'skills\ad-contract-review')
           Copy-Item LICENSE (Join-Path $stage 'LICENSE.txt')
           "source=https://github.com/${{ github.repository }}/tree/${{ github.sha }}" | Set-Content (Join-Path $stage 'SOURCE.txt')
           Compress-Archive -Path "$stage\*" -DestinationPath "$name.zip"
@@ -84,6 +86,8 @@ jobs:
           if (-not (Test-Path ([Uri]$vsto).LocalPath)) { throw 'Registered manifest does not exist.' }
           $trusted = Get-ChildItem 'HKCU:\Software\Microsoft\VSTO\Security\Inclusion' | Where-Object { (Get-ItemProperty $_.PSPath).Url -eq $vsto }
           if (@($trusted).Count -ne 1) { throw 'Inclusion list entry missing.' }
+          $skill = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'WordAgentSkills\ad-contract-review\references\checklist-seller.md'
+          if (-not (Test-Path $skill)) { throw 'Review skill was not installed.' }
           powershell -NoProfile -ExecutionPolicy Bypass -File (Join-Path $dir 'uninstall.ps1')
           if ($LASTEXITCODE -ne 0) { throw "uninstall.ps1 failed: $LASTEXITCODE" }
           if (Test-Path 'HKCU:\Software\Microsoft\Office\Word\Addins\WordOllama') { throw 'Uninstall left the add-in key.' }

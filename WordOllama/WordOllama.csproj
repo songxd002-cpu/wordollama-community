@@ -515,6 +515,18 @@
     <EmbeddedResource Include="Resources\Skills\contract-review\references\risk-guidelines.md">
       <LogicalName>WordOllama.Resources.Skills.contract-review/references/risk-guidelines.md</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Skills\ad-contract-review\SKILL.md">
+      <LogicalName>WordOllama.Resources.Skills.ad-contract-review/SKILL.md</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Skills\ad-contract-review\references\checklist-seller.md">
+      <LogicalName>WordOllama.Resources.Skills.ad-contract-review/references/checklist-seller.md</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Skills\ad-contract-review\references\checklist-buyer.md">
+      <LogicalName>WordOllama.Resources.Skills.ad-contract-review/references/checklist-buyer.md</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Skills\ad-contract-review\references\clauses.md">
+      <LogicalName>WordOllama.Resources.Skills.ad-contract-review/references/clauses.md</LogicalName>
+    </EmbeddedResource>
     <Page Include="NewUI\TranslatorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
